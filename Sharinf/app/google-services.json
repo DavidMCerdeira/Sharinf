@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "sharinf-1173",
+    "project_number": "679293250862",
+    "name": "Sharinf"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679293250862:android:8040e272b3cff2f0",
+        "client_id": "android:com.example.david.sharing",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.example.david.sharing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679293250862-ebjrbhptad5d49vm3jgcsmfrj9286qi8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.david.sharing",
+            "certificate_hash": "B86EFFAFAE4291F311FB1004372CE0058D9C69EC"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

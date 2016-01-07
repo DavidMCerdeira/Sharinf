@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Uploading files</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+		div#log_here {
+			font-size: 11px;
+			font-family: Tahoma;
+			overflow: auto;
+			width: 600px;
+			height: 200px;
+			border: 1px solid #c3c3c3;
+		}
+	</style>
+	<script>
+		var myVault;
+		function doOnLoad() {
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVault = new dhtmlXVaultObject(t);
+					//
+					myVault.attachEvent("onUploadFile", function(file, extra){
+						writeLog("<b>onUploadFile</b>, real name: "+file.name+", server name: "+file.serverName);
+					});
+					myVault.attachEvent("onUploadComplete", function(files){
+						writeLog("<b>onUploadComplete</b> "+files.length+" file"+(files.length>1?"s were":" was")+" uploaded");
+					});
+					myVault.attachEvent("onUploadCancel", function(file){
+						writeLog("<b>onUploadCancel</b>, file: "+file.name);
+					});
+					myVault.attachEvent("onUploadFail", function(file, extra){
+						writeLog("<b>onUploadFail</b>, file: "+file.name);
+					});
+					//
+					writeLog("<b>Vault inited</b>");
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+myVault.readableSize(t.maxFileSize);
+				}
+			});
+		}
+		function writeLog(text) {
+			var p = document.getElementById("log_here");
+			p.innerHTML = "<div>"+text+"</div>"+p.innerHTML;
+		}
+		function clearLog() {
+			document.getElementById("log_here").innerHTML = "";
+		}
+	</script>
+	
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Uploading files</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div id="vaultObj" style="width:400px; height:250px;"></div>
+	<br>
+	<div class="sample_title">Log (<a herf="javascript:void(0);" onclick="clearLog();">clear</a>)</div>
+	<div id="log_here"></div>
+</body>
+</html>

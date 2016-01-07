@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="session_types">
+        <item>Public</item>
+        <item>Private</item>
+        <item>Secret</item>
+    </string-array>
+
+    <string-array name="who_shares">
+        <item>Everybody</item>
+        <item>Only me</item>
+        <item>I decide</item>
+    </string-array>
+</resources>

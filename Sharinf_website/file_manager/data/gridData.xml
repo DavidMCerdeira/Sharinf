@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rows>
+	<row>
+		<cell>../icons/grid_folder.png</cell>
+		<cell>Session1</cell>
+		<cell>File folder</cell>
+		<cell>2013-10-07 18:59</cell>
+        <cell> </cell>
+    </row>
+	<row>
+		<cell>../icons/grid_file2.png</cell>
+		<cell>Christina Aguilera - Fighter</cell>
+		<cell>File media</cell>
+		<cell>2013-10-07 18:59</cell>
+        <cell>session1</cell>
+    </row>
+    <row>
+        <cell>../icons/grid_file2.png</cell>
+        <cell>Deep Purple - Smoke on the water </cell>
+        <cell>File media</cell>
+        <cell>2013-10-07 18:59</cell>
+        <cell>session1</cell>
+    </row>
+</rows>

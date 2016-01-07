@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Skins</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../skins/web/dhtmlxvault.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../skins/terrace/dhtmlxvault.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+	</style>
+	<script>
+		var myVault;
+		function doOnLoad() {
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVault = new dhtmlXVaultObject(t);
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+myVault.readableSize(t.maxFileSize);
+				}
+			});
+		}
+		function setSkin(skin) {
+			if (myVault != null) myVault.setSkin(skin);
+		}
+	</script>
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Skins</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div id="vaultObj" style="width:400px; height:250px;"></div>
+	<br>
+	<input type="button" value="skyblue" onclick="setSkin('dhx_skyblue');">
+	<input type="button" value="web"     onclick="setSkin('dhx_web');">
+	<input type="button" value="terrace" onclick="setSkin('dhx_terrace');">
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Change icon only for loading</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div.sample_info {
+			font-size: 11px;
+			font-family: Tahoma;
+			color: #606060;
+			margin: 10px 2px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+		.dhx_vault_dhx_skyblue div.dhx_vault_files div.dhx_vault_file.dhx_vault_file_uploading div.dhx_vault_file_icon div.dhx_vault_all_icons {
+			background-image: url(../common/icon_loading.gif);
+			width: 32px;
+			height: 32px;
+			left: 0px;
+		}
+	</style>
+	<script>
+		var myVault;
+		function doOnLoad() {
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVault = new dhtmlXVaultObject(t);
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+myVault.readableSize(t.maxFileSize);
+				}
+			});
+		}
+	</script>
+	
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Change icon only for loading</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div class="sample_info">icon_loading.gif will used only while loading in progress</div>
+	<div id="vaultObj" style="width:400px; height:250px;"></div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Attach vault to accordion</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+		div#accObj {
+			position: relative;
+			width: 320px;
+			height: 400px;
+		}
+	</style>
+	<script>
+		// in case of attach to dhtmlx component
+		// vault.js should be included after dhtmlx.js
+		var myAcc, myVault;
+		function doOnLoad() {
+			if (typeof(dhtmlXAccordion) == "undefined") {
+				alert("dhtmlxAccordion required for this demo.");
+				return;
+			}
+			myAcc = new dhtmlXAccordion({
+				parent: "accObj",
+				items: [
+					{ id: "a1", text: "dhtmlxVault" },
+					{ id: "a2", text: "b" },
+					{ id: "a3", text: "с" }
+				]
+			});
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVault = myAcc.cells("a1").attachVault(t);
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+myVault.readableSize(t.maxFileSize);
+				}
+			});
+		}
+	</script>
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Attach vault to accordion</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div id="accObj"></div>
+</body>
+</html>

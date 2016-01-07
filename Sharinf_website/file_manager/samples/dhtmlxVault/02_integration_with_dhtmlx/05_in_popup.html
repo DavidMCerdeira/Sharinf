@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Attach vault to popup</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+		#myToolbar {
+			margin: 10px 0px;
+		}
+	</style>
+	<script>
+		// in case of attach to dhtmlx component
+		// vault.js should be included after dhtmlx.js
+		var myToolbar;
+		var myPop;
+		var myVault;
+		var myVaultConf = null;
+		function doOnLoad() {
+			if (typeof(dhtmlXToolbarObject) == "undefined") {
+				alert("dhtmlxToolbar required for this demo.");
+				return;
+			}
+			if (typeof(dhtmlXPopup) == "undefined") {
+				alert("dhtmlxPopup required for this demo.");
+				return;
+			}
+			myToolbar = new dhtmlXToolbarObject("myToolbar", "dhx_skyblue");
+			myToolbar.setIconsPath("../../dhtmlxPopup/common/imgs/");
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVaultConf = t;
+					myToolbar.loadStruct("../../dhtmlxPopup/common/toolbar.xml", function(){
+						myToolbar.setItemText("workbut", "Vault");
+						myPop = new dhtmlXPopup({ toolbar: myToolbar, id: "workbut" });
+						myPop.attachEvent("onShow", function(){
+							if (myVault == null) myVault = myPop.attachVault(350, 200, myVaultConf);
+						});
+					});
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+dhtmlXVaultObject.prototype.readableSize(t.maxFileSize);
+				}
+			});
+		}
+	</script>
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Attach vault to popup</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div id="myToolbar"></div>
+</body>
+</html>

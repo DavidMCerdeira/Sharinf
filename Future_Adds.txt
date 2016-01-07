@@ -1,0 +1,5 @@
+/*FUTURE ADDS TO PROJECT!!*/
+
+- Permitir ao Administrador configurar permissões por utilizador, em vez de por defeito;
+
+- Actualizaçoes automáticas da pasta da drive

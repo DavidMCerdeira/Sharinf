@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Attach vault to sidebar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../../../codebase/dhtmlxvault.css"/>
+	<script src="../../../codebase/dhtmlxvault.js"></script>
+	<script src="../../../codebase/swfobject.js"></script>
+	<style>
+		div.sample_title {
+			font-size: 16px;
+			font-family: Tahoma;
+			color: #303030;
+			font-weight: bold;
+			margin: 15px 1px;
+		}
+		div#maxsize_info {
+			font-size: 12px;
+			font-family: Tahoma;
+			color: #777;
+			margin: 16px 1px 20px 1px;
+		}
+		div#sidebarObj {
+			position: relative;
+			width: 500px;
+			height: 340px;
+		}
+	</style>
+	<script>
+		// in case of attach to dhtmlx component
+		// vault.js should be included after dhtmlx.js
+		var mySidebar, myVault;
+		function doOnLoad() {
+			if (typeof(dhtmlXSideBar) == "undefined") {
+				alert("dhtmlxSidebar required for this demo.");
+				return;
+			}
+			mySidebar = new dhtmlXSideBar({
+				parent: "sidebarObj",
+				width: 130,
+				template: "text",
+				items: [
+					{ id: "a1", text: "dhtmlxVault", selected: true },
+					{ id: "a2", text: "Item #2" },
+					{ id: "a3", text: "Item #3" }
+				]
+			});
+			window.dhx4.ajax.get("../server/upload_conf.php", function(r){
+				var t = window.dhx4.s2j(r.xmlDoc.responseText);
+				if (t != null) {
+					myVault = mySidebar.items("a1").attachVault(t);
+					// update max file size notice
+					document.getElementById("maxsize_info").innerHTML = "Upload max filesize: "+myVault.readableSize(t.maxFileSize);
+				}
+			});
+		}
+	</script>
+</head>
+<body onload="doOnLoad();">
+	<div class="sample_title">Attach vault to sidebar</div>
+	<div id="maxsize_info">&nbsp;</div>
+	<div id="sidebarObj"></div>
+</body>
+</html>

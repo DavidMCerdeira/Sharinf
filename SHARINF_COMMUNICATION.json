@@ -1,0 +1,374 @@
+Objects:
+//Session Data
+{
+		"SessionConfig": {
+							"name": <string>, 
+							"permissions":"free(0) or restricted(1)",
+							"type":"Public(0) or Private(1)"
+						 },
+    "sessionID": "INT ID",
+    "activeFlag":"bool"
+}
+
+//SessionConfig
+{
+	"name" : <string>,
+	"permissions":"free(0) or restricted(1)",
+	"type":"Public(0) or Private(1)"
+}
+
+//BeaconPhysID
+{
+	"uuid": "string",
+	"major": "<int>",
+	"minor": "<int>",
+	"lvirtual": "<int>"
+}
+
+//BeaconState
+{
+    "beaconVirtID" : "ID FROM DATABASE",
+    "state" : "occupied OR free"
+}
+
+//User
+{
+	"email":"<string>"
+}
+
+//ficheiros
+{
+	"link":"<string>",
+	"owneremail":"<string>",
+	"name":"<string>"
+}
+
+
+$Create Connection
+	# CREATECONNECTION 0
+	§Request:
+		Frame: SHARINF\CREATECONNECTION\<data>\end
+		<data>:
+			//User
+			{
+				"email": "Zé@gaymail.com"
+			}
+
+	§Responses:
+		Frame: SHARINF\CREATECONNECTION\<status>\<data>\end
+		<status>:
+			SUCCESS   - 1
+			UNSUCCESS - 0
+		<data>:
+			NULL
+
+$Get Beacons Info
+	# GetBeaconsInfo 1
+	§Request:
+		Frame: SHARINF\BEACONDETECTED\<data>\end
+		<data>:
+		//Session List preenche as suas posições consoante o estado em BeaconState;
+		*No caso de o estado estar free, a posição na SessionList vai a NULL
+
+			[
+				{
+					"uuid": "string",
+					"major": "<int>",
+					"minor": "<int>",
+					"lvirtual": "<int>"
+				}
+		 ]
+
+	§Responses:
+		Frame: SHARINF\1<status>\<data>\end
+		<status>:
+			SUCCESS   - 1
+			UNSUCCESS - 0
+		<data>:
+			ON SUCCESS:
+  				 //Session List preenche as suas posições consoante o estado em BeaconState;
+		*No caso de o estado estar free, a posição na SessionList vai a NULL
+		{
+			"BeaconList":[
+							{
+								"BeaconPhysID":
+								{
+									"uuid": "string",
+									"major": "<int>",
+									"minor": "<int>",
+									"lvirtual": "<int>"
+								},
+								"BeaconState":
+								{
+				   					"beaconVirtID" : "ID FROM DATABASE",
+				     				"state":"occupied OR free"
+								}
+							}, ...
+						],
+			"SessionList":[
+							  {
+								"SessionConfig":
+								{
+									"name" : string
+									"permissions":"free or restricted",
+									"type":"public or private"
+								},
+							    "sessionID": "INT ID",
+							    "activeFlag":"int"
+							  }
+						  ]
+  		}
+            ON UNSUCCESS:
+            	NULL
+
+$Create Session
+	#CREATESESSION 2
+	Frame: SHARINF\CREATESESSION\<data>\end
+	<data>:
+			{
+
+                "SessionConfig":
+                				{
+                					"name" : <string>
+									"permissions":"free or restricted",
+									"type":"public or private"
+								},
+
+
+                  "BeaconState":
+								{
+				   					"beaconVirtID":"ID FROM DATABASE",
+				     				"state":"occupied OR free"
+								}
+
+			}
+
+	§Responses:
+	Frame: SHARINF\CREATESESSION<status>\<data>\end
+	<status>:
+			SUCCESS   - 1
+			UNSUCCESS - 0
+	<data>:
+	ON SUCCESS:
+	          {
+	            "SessionConfig":
+	                        	{
+	                        		"name" : <string>
+									"permissions":"free or restricted",
+									"type":"public or private"
+								},
+	            "sessionID": "INT SESSION'S ID",
+							"activeFlag": "bool"
+	          }
+	ON UNSUCCESS:
+		{
+			"Error": "description"
+		}
+
+$Get user List from Session
+	#GUSERFROMSESS 3
+	§Request:
+	Frame: SHARINF\GUSERFROMSESS<SUCCESS or UNSUCCESS>\<data>\end
+	<data>
+	{
+		"sessionID": "INT SESSION'S ID"
+	}
+	§Responses:
+	ON SUCCESS:
+	Frame: SHARINF\GUSERFROMSESS<status>\<data>\end
+	<data>
+	[
+		{"email" : "<string>"}
+	]
+
+$Get Files List from Session
+	#GFILEFROMSESS 4
+	§Request:
+	Frame: SHARINF\GFILEFROMSESS\<data>\end
+	<data>
+	{
+		"sessionID": "<int>"
+	}
+	§Responses:
+	Frame: Frame: SHARINF\GFILEFROMSESS<SUCCESS or UNSUCCESS>\<data>\end
+	OnSuccess:
+	<data>
+	[
+		{
+			"link":"<string>",
+			"owneremail":"<string>",
+			"name":"<string>"
+		}
+	]
+
+$Join Session
+	#JOINSESS 5
+	§Request
+	Frame: SHARINF\JOINSESS\<data>\end
+	<data>
+	{
+		"sessionID": "<int>"
+	}
+	§Responses:
+	Frame: Frame: SHARINF\JOINSESS<SUCCESS or UNSUCCESS>\<data>\end
+	<data>
+	null
+
+$Getout Session
+	#GETOUTSESS 6
+	§Request:
+	Frame: SHARINF\GETOUTSESS\<data>\end
+	<data>
+	{
+		"sessionID": "<int>"
+	}
+	§Responses:
+	Frame: Frame: SHARINF\GETOUTSESS<SUCCESS or UNSUCCESS>\<data>\end
+	<data>
+	null
+
+$Change Session Configurations
+	#CHNGSESSCONFIG 7
+	§Request:
+	Frame: SHARINF\CHNGSESSCONFIG\<data>\end
+	<data>
+	{
+		"sessionID": "<int>",
+		"NewConfig":{
+					 "permissions":"free or restricted",
+					 "type":"public or private"
+					}
+	}
+	§Responses:
+	Frame: SHARINF\CHNGSESSCONFIG<SUCCESS or UNSUCCESS>\<data>\end
+	<data>
+	{
+	 "permissions":"free or restricted",
+	 "type":"public or private"
+	}
+
+$Load File to Session
+	#LDFILETOSESS 8
+	§Request:
+	Frame: SHARINF\LDFILETOSESS\<data>\end
+	<data>
+	{
+		"File":{
+							"link":"<string>",
+							"owneremail":"<string>",
+							"name":"<string>"
+						},
+		"sessionID": "INT ID"
+	}
+
+	§Responses:
+	Frame: SHARINF\LDFILETOSESS<SUCCESS or UNSUCCESS>\<data>\end
+	ONSUCCESS:
+	<data>
+	null
+	ON UNSUCCESS:
+	<data>
+	null
+
+
+	$Load File to Session
+		#LDFILETOSESS 14
+		§Request:
+		Frame: SHARINF\LDFILETOSESS\<data>\end
+		<data>
+		{
+			"File":{
+								"link":"<string>",
+								"owneremail":"<string>",
+								"name":"<string>"
+							},
+			"sessionID": "INT ID"
+		}
+
+		§Responses:
+		Frame: SHARINF\LDFILETOSESS<SUCCESS or UNSUCCESS>\<data>\end
+		ONSUCCESS:
+		<data>
+		null
+		ON UNSUCCESS:
+		<data>
+		null
+
+	$$$FROM SERVER TO USER:
+
+	$Session Ended
+	#SESSENDED 9
+	§Request:
+	Frame: SHARINF\SESSENDED\<data>\end
+	<data>
+	{
+		"sessionID": "INT ID"
+	}
+
+	§Responses:
+	Frame: SHARINF\LDFILETOSESS\<SUCCESS or UNSUCCESS>\end
+
+	$You are the admin
+	#YOURNEWADMIN 10
+	§Request:
+	Frame: SHARINF\YOURNEWADMIN\<data>\end
+	<data>
+	{
+		"sessionID": "INT ID"
+	}
+	§Responses:
+	Frame: SHARINF\YOURNEWADMIN\<SUCCESS or UNSUCCESS>\end
+
+
+	$Request to join private session to admin
+	#REQUESTJOINSESSION 11
+	§Request:
+	Frame: SHARINF\REQUESTJOINSESSION\<data>\end
+	<data>
+	{
+		"sessionID": "INT ID",
+		"email": "<email string>"
+	}
+	§Responses:
+	Frame: SHARINF\REQUESTJOINSESSION\<SUCCESS or UNSUCCESS>\end
+
+	$Upadate session user list
+	#UPDATEUSERS 12
+	§Request:
+	Frame: SHARINF\UPDATEUSERS\<data>\end
+	<data>
+	{
+		"sessionID": "INT ID",
+		"userList" : [
+										{ "email" : "user1" },
+										{ "email" : "user2" },
+										...
+								 ]
+	}
+	§Responses:
+	Frame: SHARINF\UPDATEUSERS\<SUCCESS or UNSUCCESS>\end
+
+	$Upadate session file list
+	#UPDATEFILES 13
+	§Request:
+	Frame: SHARINF\UPDATEFILES\<data>\end
+	<data>
+	{
+		"sessionID": "INT ID",
+		"fileList" : [
+										{
+											"link":"link1",
+											"owneremail":"userx",
+											"name":"FICHEIRO 2"
+										},
+										{
+											"link":"link2",
+											"owneremail":"usery",
+											"name":"FICHEIRO 2"
+										},
+										...
+								]
+	}
+
+	§Responses:
+	Frame: SHARINF\UPDATEFILES\<SUCCESS or UNSUCCESS>\end
